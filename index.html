@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPKP & SPAK - Kantor Kementerian Agama Kota Blitar</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts Inter & FontAwesome Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        kemenag: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#006837', // Official Kemenag Green Primary
+                            900: '#084826',
+                        },
+                        gold: {
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom styles for interactive card radio inputs */
+        .option-card input[type="radio"]:checked + label {
+            border-color: #06fc89;
+            background-color: #0bcaeb;
+            box-shadow: 0 4px 12px rgba(5, 212, 115, 0.15);
+            transform: translateY(-2px);
+        }
+        .option-card label {
+            transition: all 0.2s ease-in-out;
+        }
+        /* Hide default scrollbar for smooth tab scrolling if needed */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col justify-between antialiased">
+
+    <!-- HEADER / NAVIGATION BAR -->
+    <header class="bg-gradient-to-r from-kemenag-900 via-kemenag-800 to-emerald-900 text-white shadow-lg sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-3">
+                
+                <!-- Logo & Title Section -->
+                <div class="flex items-center space-x-3 text-center md:text-left">
+                    <div>
+                        <!-- Kemenag Logo SVG Vector Fallback Included -->
+                        <img src="c:\Users\User\Desktop\CODING SPKP\hijau bulat LOGO.jpeg" width="100" height="150" />
+                    </div>
+                    <div>
+                        <h1 class="text-base sm:text-lg md:text-xl font-bold tracking-tight text-amber-300">
+                            KANTOR KEMENTERIAN AGAMA KOTA BLITAR
+                        </h1>
+                        <p class="text-xs sm:text-sm font-medium text-emerald-100">
+                            Survey Persepsi Kualitas Pelayanan (SPKP) & Survey Persepsi Anti Korupsi (SPAK)
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Tagline Badge -->
+                <div class="flex items-center space-x-2">
+                    <span class="bg-amber-400 text-kemenag-900 text-xs font-extrabold px-3 py-1.5 rounded-full shadow-inner tracking-wide uppercase flex items-center">
+                        <i class="fa-solid fa-star text-kemenag-900 mr-1.5"></i> MODEL: Moderat dan Literat
+                    </span>
+                    <button onclick="toggleDashboardModal()" class="bg-white/10 hover:bg-white/20 text-white text-xs px-3 py-1.5 rounded-lg border border-white/20 transition flex items-center space-x-1">
+                        <i class="fa-solid fa-chart-pie"></i>
+                        <span>Statistik</span>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+        
+        <!-- Legal Reference Bar -->
+        <div class="bg-kemenag-900/60 border-t border-emerald-700/50 py-1 px-4 text-center text-[11px] text-emerald-200">
+            <i class="fa-solid fa-scale-balanced mr-1"></i> Berdasarkan PermenPAN-RB No. 90 Tahun 2021 & SE MenPAN-RB No. 04 Tahun 2023 (Pembangunan ZI Menuju WBK/WBBM)
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 py-6 md:py-8 flex-grow w-full">
+
+        <!-- Banner Card -->
+         <div>
+        <img src="c:\Users\User\Desktop\CODING SPKP\Screenshot 2026-10-17 144433.png" />
+     </div>
+     
+        <div class="bg-gradient-to-r from-emerald-800 to-kemenag-800 rounded-2xl p-5 md:p-6 text-white mb-6 shadow-md relative overflow-hidden">
+            <div class="absolute -right-10 -bottom-10 opacity-10 text-white">
+                <i class="fa-solid fa-handshake text-9xl"></i>
+            </div>
+            <div class="relative z-10">
+                <span class="inline-block bg-emerald-500/30 text-emerald-200 text-xs font-semibold px-2.5 py-1 rounded-md mb-2">
+                    <i class="fa-solid fa-user-shield mr-1"></i> Survey Anonim & Rahasia
+                </span>
+                <h2 class="text-xl md:text-2xl font-bold mb-2 text-white">Bantu Kami Meningkatkan Kualitas Pelayanan</h2>
+                <p class="text-xs md:text-sm text-emerald-100 leading-relaxed max-w-2xl">
+                    Partisipasi Bapak/Ibu sangat berharga untuk mewujudkan Kantor Kementerian Agama Kota Blitar yang bersih, transparan, akuntabel, dan bebas dari korupsi.
+                </p>
+            </div>
+        </div>
+
+        <!-- PROGRESS STEPPER -->
+        <div class="bg-white rounded-2xl p-4 md:p-6 shadow-sm border border-slate-200 mb-6">
+            <div class="flex items-center justify-between relative">
+                <!-- Progress Bar Line -->
+                <div class="absolute left-0 top-1/2 transform -translate-y-1/2 w-full h-1 bg-slate-200 -z-0"></div>
+                <div id="progress-bar-fill" class="absolute left-0 top-1/2 transform -translate-y-1/2 h-1 bg-kemenag-800 transition-all duration-300 -z-0 w-0"></div>
+
+                <!-- Step 1 Indicator -->
+                <div class="step-node flex flex-col items-center relative z-10" data-step="1">
+                    <div class="step-circle w-9 h-9 md:w-11 md:h-11 rounded-full bg-kemenag-800 text-white font-bold flex items-center justify-center text-sm shadow-md transition-all">
+                        1
+                    </div>
+                    <span class="step-label text-[11px] md:text-xs font-semibold text-kemenag-800 mt-2 text-center">Profil</span>
+                </div>
+
+                <!-- Step 2 Indicator -->
+                <div class="step-node flex flex-col items-center relative z-10" data-step="2">
+                    <div class="step-circle w-9 h-9 md:w-11 md:h-11 rounded-full bg-slate-200 text-slate-600 font-bold flex items-center justify-center text-sm transition-all">
+                        2
+                    </div>
+                    <span class="step-label text-[11px] md:text-xs font-medium text-slate-500 mt-2 text-center">SPKP (8)</span>
+                </div>
+
+                <!-- Step 3 Indicator -->
+                <div class="step-node flex flex-col items-center relative z-10" data-step="3">
+                    <div class="step-circle w-9 h-9 md:w-11 md:h-11 rounded-full bg-slate-200 text-slate-600 font-bold flex items-center justify-center text-sm transition-all">
+                        3
+                    </div>
+                    <span class="step-label text-[11px] md:text-xs font-medium text-slate-500 mt-2 text-center">SPAK (5)</span>
+                </div>
+
+                <!-- Step 4 Indicator -->
+                <div class="step-node flex flex-col items-center relative z-10" data-step="4">
+                    <div class="step-circle w-9 h-9 md:w-11 md:h-11 rounded-full bg-slate-200 text-slate-600 font-bold flex items-center justify-center text-sm transition-all">
+                        4
+                    </div>
+                    <span class="step-label text-[11px] md:text-xs font-medium text-slate-500 mt-2 text-center">Saran</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- FORM CONTAINER -->
+        <form id="surveyForm" onsubmit="event.preventDefault(); submitSurvey();" class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+            
+            <!-- STEP 1: DATA RESPONDEN -->
+            <div id="step-1" class="form-step p-6 md:p-8 space-y-6">
+                <div class="border-b border-slate-200 pb-4">
+                    <h3 class="text-lg font-bold text-slate-800 flex items-center">
+                        <i class="fa-solid fa-address-card text-kemenag-800 mr-2.5"></i> Bagian 1: Data Responden (Profil)
+                    </h3>
+                    <p class="text-xs text-slate-500 mt-1">Lengkapi informasi demografi Anda. Data ini dijamin kerahasiaannya.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <!-- Tanggal Survey -->
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Tanggal Survei <span class="text-red-500">*</span></label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                                <i class="fa-solid fa-calendar-day"></i>
+                            </span>
+                            <input type="date" id="tglSurvei" required class="w-full pl-10 pr-3 py-2.5 text-sm bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-kemenag-800 focus:border-kemenag-800 outline-none transition">
+                        </div>
+                    </div>
+
+                    <!-- Nama Responden -->
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Nama Lengkap Responden <span class="text-red-500">*</span></label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                                <i class="fa-solid fa-user"></i>
+                            </span>
+                            <input type="text" id="namaResponden" placeholder="Masukkan nama lengkap Anda" required class="w-full pl-10 pr-3 py-2.5 text-sm bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-kemenag-800 focus:border-kemenag-800 outline-none transition">
+                        </div>
+                    </div>
+
+                    <!-- Nomor HP -->
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Nomor WhatsApp / HP <span class="text-red-500">*</span></label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                                <i class="fa-solid fa-phone"></i>
+                            </span>
+                            <input type="tel" id="nomorHp" placeholder="Contoh: 081234567890" required pattern="[0-9]{9,15}" class="w-full pl-10 pr-3 py-2.5 text-sm bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-kemenag-800 focus:border-kemenag-800 outline-none transition">
+                        </div>
+                    </div>
+
+                    <!-- Jenis Kelamin -->
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Jenis Kelamin <span class="text-red-500">*</span></label>
+                        <div class="grid grid-cols-2 gap-3 pt-0.5">
+                            <label class="flex items-center justify-center p-2.5 border border-slate-300 rounded-xl cursor-pointer hover:bg-slate-50 transition">
+                                <input type="radio" name="jenisKelamin" value="Laki-laki" required class="text-kemenag-800 focus:ring-kemenag-800 mr-2">
+                                <span class="text-xs font-medium text-slate-700"><i class="fa-solid fa-mars text-blue-500 mr-1"></i> Laki-laki</span>
+                            </label>
+                            <label class="flex items-center justify-center p-2.5 border border-slate-300 rounded-xl cursor-pointer hover:bg-slate-50 transition">
+                                <input type="radio" name="jenisKelamin" value="Perempuan" required class="text-kemenag-800 focus:ring-kemenag-800 mr-2">
+                                <span class="text-xs font-medium text-slate-700"><i class="fa-solid fa-venus text-pink-500 mr-1"></i> Perempuan</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Usia -->
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Usia (Tahun) <span class="text-red-500">*</span></label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                                <i class="fa-solid fa-cake-candles"></i>
+                            </span>
+                            <input type="number" id="usia" min="15" max="100" placeholder="Contoh: 35" required class="w-full pl-10 pr-3 py-2.5 text-sm bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-kemenag-800 focus:border-kemenag-800 outline-none transition">
+                        </div>
+                    </div>
+
+                    <!-- Pendidikan Terakhir -->
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Pendidikan Terakhir <span class="text-red-500">*</span></label>
+                        <select id="pendidikan" required class="w-full px-3 py-2.5 text-sm bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-kemenag-800 focus:border-kemenag-800 outline-none transition">
+                            <option value="">-- Pilih Pendidikan --</option>
+                            <option value="SD">SD / Sederajat</option>
+                            <option value="SMP">SMP / Sederajat</option>
+                            <option value="SMA">SMA / Sederajat</option>
+                            <option value="D3">Diploma (D1 - D4)</option>
+                            <option value="S1">Sarjana (S1)</option>
+                            <option value="S2">Magister (S2)</option>
+                            <option value="S3">Doktor (S3)</option>
+                        </select>
+                    </div>
+
+                    <!-- Pekerjaan Utama -->
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Pekerjaan Utama <span class="text-red-500">*</span></label>
+                        <select id="pekerjaan" required class="w-full px-3 py-2.5 text-sm bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-kemenag-800 focus:border-kemenag-800 outline-none transition">
+                            <option value="">-- Pilih Pekerjaan Utama --</option>
+                            <option value="ASN/TNI/Polri">ASN / TNI / Polri</option>
+                            <option value="Pegawai Swasta">Pegawai Swasta</option>
+                            <option value="Wiraswasta">Wiraswasta / Usahawan</option>
+                            <option value="Pelajar/Mahasiswa">Pelajar / Mahasiswa</option>
+                            <option value="Lain-Lainnya">Lain-Lainnya</option>
+                        </select>
+                    </div>
+
+                    <!-- Jenis Layanan -->
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Jenis Layanan yang Diterima <span class="text-red-500">*</span></label>
+                        <select id="jenisLayanan" required class="w-full px-3 py-2.5 text-sm bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-kemenag-800 focus:border-kemenag-800 outline-none transition font-medium text-slate-800">
+                            <option value="">-- Pilih Jenis Layanan Kankemenag Kota Blitar --</option>
+                            <option value="Pelayanan Pendidikan Madrasah">Pelayanan Pendidikan Madrasah</option>
+                            <option value="Pelayanan Bimbingan Masyarakat Islam">Pelayanan Bimbingan Masyarakat Islam</option>
+                            <option value="Pelayanan Pendidikan Agama & Keagamaan Islam">Pelayanan Pendidikan Agama & Keagamaan Islam</option>
+                            <option value="Pelayanan Kristen / Katolik / Hindu / Buddha / Khonghucu">Pelayanan Kristen / Katolik / Hindu / Buddha / Khonghucu</option>
+                            <option value="Pelayanan Kepegawaian">Pelayanan Kepegawaian</option>
+                            <option value="Pelayanan KUA Sananwetan">Pelayanan KUA Sananwetan</option>
+                            <option value="Pelayanan KUA Kepanjenkidul">Pelayanan KUA Kepanjenkidul</option>
+                            <option value="Pelayanan KUA Sukorejo">Pelayanan KUA Sukorejo</option>
+                            <option value="Penyelenggara Zawa">Penyelenggara Zawa (Zakat & Wakaf)</option>
+                            <option value="Pelayanan Sertifikasi Halal">Pelayanan Sertifikasi Halal</option>
+                            <option value="Lain-Lainnya">Lain-Lainnya</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 2: EVALUASI SPKP (8 UNSUR) -->
+            <div id="step-2" class="form-step hidden p-6 md:p-8 space-y-8">
+                <div class="border-b border-slate-200 pb-4">
+                    <span class="bg-emerald-100 text-kemenag-800 text-xs font-bold px-2.5 py-1 rounded-md mb-2 inline-block">Survey Persepsi Kualitas Pelayanan</span>
+                    <h3 class="text-lg font-bold text-slate-800 flex items-center">
+                        <i class="fa-solid fa-award text-kemenag-800 mr-2.5"></i> Bagian 2: Evaluasi 8 Unsur SPKP
+                    </h3>
+                    <p class="text-xs text-slate-500 mt-1">Pilih jawaban yang paling sesuai dengan pengalaman layanan yang Anda terima.</p>
+                </div>
+
+                <div id="spkp-questions-container" class="space-y-8">
+                    <!-- Dynamic Question Cards generated via JS -->
+                </div>
+            </div>
+
+            <!-- STEP 3: EVALUASI SPAK (5 UNSUR) -->
+            <div id="step-3" class="form-step hidden p-6 md:p-8 space-y-8">
+                <div class="border-b border-slate-200 pb-4">
+                    <span class="bg-amber-100 text-amber-800 text-xs font-bold px-2.5 py-1 rounded-md mb-2 inline-block">Survey Persepsi Anti Korupsi</span>
+                    <h3 class="text-lg font-bold text-slate-800 flex items-center">
+                        <i class="fa-solid fa-shield-halved text-kemenag-800 mr-2.5"></i> Bagian 3: Evaluasi 5 Unsur SPAK
+                    </h3>
+                    <p class="text-xs text-slate-500 mt-1">Berikan penilaian terkait integritas dan kebebasan dari praktek korupsi/pungli pada unit layanan ini.</p>
+                </div>
+
+                <div id="spak-questions-container" class="space-y-8">
+                    <!-- Dynamic Question Cards generated via JS -->
+                </div>
+            </div>
+
+            <!-- STEP 4: SARAN & MASUKAN -->
+            <div id="step-4" class="form-step hidden p-6 md:p-8 space-y-6">
+                <div class="border-b border-slate-200 pb-4">
+                    <h3 class="text-lg font-bold text-slate-800 flex items-center">
+                        <i class="fa-solid fa-comment-dots text-kemenag-800 mr-2.5"></i> Bagian 4: Saran, Masukan & Konfirmasi
+                    </h3>
+                    <p class="text-xs text-slate-500 mt-1">Saran Anda sangat berarti bagi perbaikan berkelanjutan pelayanan kami.</p>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2">
+                        Saran dan Masukan untuk Peningkatan Pelayanan Kantor Kementerian Agama Kota Blitar:
+                    </label>
+                    <textarea id="saranMasukan" rows="5" placeholder="Tuliskan saran, kritik membangun, atau apresiasi Anda di sini..." class="w-full p-3 text-sm bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-kemenag-800 focus:border-kemenag-800 outline-none transition resize-y"></textarea>
+                </div>
+
+                <!-- Summary Checklist Box -->
+                <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-xs text-emerald-900 space-y-2">
+                    <div class="font-bold flex items-center text-kemenag-800">
+                        <i class="fa-solid fa-circle-check text-base mr-2"></i> Ringkasan Pengisian Survei
+                    </div>
+                    <ul class="list-disc pl-5 space-y-1 text-slate-700">
+                        <li>Data Diri: <span id="summary-nama" class="font-semibold text-slate-900">-</span></li>
+                        <li>Layanan: <span id="summary-layanan" class="font-semibold text-slate-900">-</span></li>
+                        <li>Status SPKP (8 Unsur): <span class="text-emerald-700 font-bold">Terisi Lengkap</span></li>
+                        <li>Status SPAK (5 Unsur): <span class="text-emerald-700 font-bold">Terisi Lengkap</span></li>
+                    </ul>
+                </div>
+
+                <div class="p-3 bg-amber-50 rounded-xl border border-amber-200 text-xs text-amber-800 flex items-start space-x-2">
+                    <i class="fa-solid fa-circle-info text-amber-600 text-sm mt-0.5"></i>
+                    <span>Dengan menekan tombol <strong>"Kirim Survei"</strong>, Anda telah menyetujui bahwa data yang diisikan adalah benar dan objektif.</span>
+                </div>
+            </div>
+
+            <!-- NAVIGATION BUTTONS -->
+            <div class="bg-slate-50 border-t border-slate-200 px-6 py-4 flex items-center justify-between">
+                <button type="button" id="prevBtn" onclick="changeStep(-1)" class="hidden bg-white border border-slate-300 text-slate-700 hover:bg-slate-100 font-semibold text-xs md:text-sm px-5 py-2.5 rounded-xl transition items-center">
+                    <i class="fa-solid fa-arrow-left mr-2"></i> Sebelumnya
+                </button>
+                <div class="ml-auto flex space-x-3">
+                    <button type="button" id="nextBtn" onclick="changeStep(1)" class="bg-kemenag-800 hover:bg-kemenag-900 text-white font-semibold text-xs md:text-sm px-6 py-2.5 rounded-xl shadow-md transition flex items-center">
+                        Selanjutnya <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </button>
+                    <button type="submit" id="submitBtn" class="hidden bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs md:text-sm px-6 py-2.5 rounded-xl shadow-lg transition flex items-center">
+                        <i class="fa-solid fa-paper-plane mr-2"></i> Kirim Survei
+                    </button>
+                </div>
+            </div>
+
+        </form>
+    </main>
+
+    <!-- THANK YOU & RESULT MODAL -->
+    <div id="resultModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 md:p-8 shadow-2xl transform transition-all text-center relative overflow-hidden">
+            
+            <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl shadow-inner">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+
+            <h3 class="text-xl font-bold text-slate-900 mb-1">Terima Kasih!</h3>
+            <p class="text-xs text-slate-500 mb-6">Survei Anda berhasil dikirim dan tersimpan di database sistem.</p>
+
+            <!-- Calculated Index Cards -->
+            <div class="grid grid-cols-2 gap-3 mb-6">
+                <!-- IPKP Score Card -->
+                <div class="bg-emerald-50 border border-emerald-200 p-3 rounded-2xl">
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-700 block mb-1">Nilai IPKP</span>
+                    <div id="modal-ipkp-score" class="text-2xl font-extrabold text-kemenag-800">0.00</div>
+                    <span id="modal-ipkp-badge" class="inline-block text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-200 text-emerald-800 mt-1">-</span>
+                </div>
+
+                <!-- IPAK Score Card -->
+                <div class="bg-amber-50 border border-amber-200 p-3 rounded-2xl">
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-amber-700 block mb-1">Nilai IPAK</span>
+                    <div id="modal-ipak-score" class="text-2xl font-extrabold text-amber-800">0.00</div>
+                    <span id="modal-ipak-badge" class="inline-block text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-200 text-amber-800 mt-1">-</span>
+                </div>
+            </div>
+
+            <p class="text-xs text-slate-600 leading-relaxed mb-6">
+                Penilaian Anda membantu Kantor Kementerian Agama Kota Blitar mempertahankan Wilayah Bebas dari Korupsi (WBK) dan Wilayah Birokrasi Bersih Melayani (WBBM).
+            </p>
+
+            <button onclick="closeModalAndReset()" class="w-full bg-kemenag-800 hover:bg-kemenag-900 text-white font-bold py-3 px-4 rounded-xl shadow-md transition text-xs uppercase tracking-wider">
+                Selesai & Pengisian Baru
+            </button>
+        </div>
+    </div>
+
+    <!-- STATISTIK / DASHBOARD MODAL -->
+    <div id="dashboardModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-2xl w-full p-6 md:p-8 shadow-2xl relative overflow-hidden max-h-[90vh] overflow-y-auto">
+            <button onclick="toggleDashboardModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 w-8 h-8 rounded-full flex items-center justify-center bg-slate-100">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="flex items-center space-x-3 mb-6 border-b border-slate-200 pb-4">
+                <div class="p-2.5 bg-kemenag-100 text-kemenag-800 rounded-xl">
+                    <i class="fa-solid fa-chart-line text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold text-slate-900">Ringkasan Statistik Real-Time</h3>
+                    <p class="text-xs text-slate-500">Hasil akumulasi survei berdasarkan PermenPAN-RB No. 90/2021</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 text-center">
+                    <span class="text-[11px] font-semibold text-slate-500 uppercase">Total Responden</span>
+                    <div id="stat-total-responden" class="text-2xl font-black text-slate-800 mt-1">1</div>
+                </div>
+                <div class="bg-emerald-50 p-4 rounded-2xl border border-emerald-200 text-center">
+                    <span class="text-[11px] font-semibold text-emerald-700 uppercase">Rata-rata IPKP</span>
+                    <div id="stat-avg-ipkp" class="text-2xl font-black text-kemenag-800 mt-1">88.50</div>
+                    <span class="text-[10px] font-bold text-emerald-600">Sangat Baik</span>
+                </div>
+                <div class="bg-amber-50 p-4 rounded-2xl border border-amber-200 text-center">
+                    <span class="text-[11px] font-semibold text-amber-700 uppercase">Rata-rata IPAK</span>
+                    <div id="stat-avg-ipak" class="text-2xl font-black text-amber-800 mt-1">92.00</div>
+                    <span class="text-[10px] font-bold text-amber-600">Sangat Baik</span>
+                </div>
+            </div>
+
+            <!-- Kategori Standard Reference Box -->
+            <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200 text-xs mb-6">
+                <h4 class="font-bold text-slate-800 mb-2">Skala Kategori Nilai IKM / Mutu Pelayanan:</h4>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-[11px]">
+                    <div class="p-2 bg-red-50 text-red-700 rounded-lg border border-red-200">
+                        <div class="font-bold">25.00 - 64.99</div>
+                        <div>Tidak Baik (D)</div>
+                    </div>
+                    <div class="p-2 bg-orange-50 text-orange-700 rounded-lg border border-orange-200">
+                        <div class="font-bold">65.00 - 76.60</div>
+                        <div>Kurang Baik (C)</div>
+                    </div>
+                    <div class="p-2 bg-blue-50 text-blue-700 rounded-lg border border-blue-200">
+                        <div class="font-bold">76.61 - 88.31</div>
+                        <div>Baik (B)</div>
+                    </div>
+                    <div class="p-2 bg-emerald-50 text-emerald-800 rounded-lg border border-emerald-200">
+                        <div class="font-bold">88.32 - 100.00</div>
+                        <div>Sangat Baik (A)</div>
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="toggleDashboardModal()" class="w-full bg-slate-200 hover:bg-slate-300 text-slate-800 font-semibold py-2.5 rounded-xl text-xs transition">
+                Tutup
+            </button>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 text-white border-t border-slate-800 mt-12 py-8 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+            
+            <div class="text-center md:text-left space-y-1">
+                <div class="text-sm font-bold text-amber-400">KANTOR KEMENTERIAN AGAMA KOTA BLITAR</div>
+                <div class="text-xs text-slate-400 flex items-center justify-center md:justify-start space-x-1">
+                    <i class="fa-solid fa-location-dot text-red-400 mr-1"></i>
+                    <span>Jalan Ir. Sukarno No.11 B Kota Blitar</span>
+                </div>
+                <div class="text-xs text-slate-400 flex items-center justify-center md:justify-start space-x-1">
+                    <i class="fa-brands fa-whatsapp text-emerald-400 mr-1"></i>
+                    <span>No. WhatsApp: 085258731212</span>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <span class="inline-block bg-emerald-950 text-emerald-300 border border-emerald-700 text-xs font-semibold px-3 py-1 rounded-full">
+                     "PUASSTI: Profesional, Unggul, Simpel, Sinergi, Transparan, Inovatif"
+                </span>
+                <p class="text-[11px] text-slate-500 mt-2">© 2026 Kantor Kementerian Agama Kota Blitar. All Rights Reserved.</p>
+            </div>
+
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // DATA QUESTIONS DEFINITION (PERMENPAN-RB NO. 90 TAHUN 2021)
+        const spkpQuestions = [
+            "Informasi pelayanan pada unit ini tersedia melalui media elektronik maupun non elektronik?",
+            "Persyaratan pelayanan yang diinformasikan sesuai dengan persyaratan yang ditetapkan unit layanan ini?",
+            "Prosedur/Alur Pelayanan yang ditetapkan unit layanan ini mudah diikuti/dilakukan?",
+            "Jangka waktu penyelesaian pelayanan yang diterima Bapak/Ibu sesuai dengan yang ditetapkan unit layanan ini?",
+            "Tarif/Biaya pelayanan yang dibayarkan pada unit layanan ini sesuai dengan tarif/biaya yang ditetapkan?",
+            "Sarana dan Prasarana pendukung pelayanan/sistem pelayanan online yang disediakan unit layanan ini memberikan kenyamanan/mudah digunakan?",
+            "Petugas pelayanan/sistem pelayanan online pada unit layanan ini merespon keperluan Bapak/Ibu dengan cepat?",
+            "Layanan konsultasi dan pengaduan yang disediakan unit layanan ini mudah digunakan/diakses?"
+        ];
+
+        const spakQuestions = [
+            "Tidak ada diskriminasi pelayanan pada unit layanan ini?",
+            "Tidak ada Pelayanan diluar prosedur/kecurangan pelayanan pada unit layanan ini?",
+            "Tidak ada penerimaan imbalan/uang/barang/fasilitas diluar ketentuan yang berlaku pada unit layanan ini?",
+            "Tidak ada Pungutan Liar (Pungli) pada unit layanan ini?",
+            "Tidak ada percaloan/perantara tidak resmi pada unit layanan ini?"
+        ];
+
+        const ratingOptions = [
+            { value: 1, label: "Tidak Baik", icon: "🔴", emoji: "😖", desc: "Sangat Lambat / Tidak Sesuai" },
+            { value: 2, label: "Kurang Baik", icon: "🟠", emoji: "😕", desc: "Lambat / Kurang Sesuai" },
+            { value: 3, label: "Baik", icon: "🟢", emoji: "😊", desc: "Cepat / Sesuai" },
+            { value: 4, label: "Sangat Baik", icon: "🌟", emoji: "😍", desc: "Sangat Cepat / Sangat Sesuai" }
+        ];
+
+        let currentStep = 1;
+        const totalSteps = 4;
+
+        // INITIALIZE APPLICATION ON LOAD
+        window.onload = function() {
+            // Set default date to today
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('tglSurvei').value = today;
+
+            // Render Questions
+            renderQuestions('spkp-questions-container', spkpQuestions, 'spkp');
+            renderQuestions('spak-questions-container', spakQuestions, 'spak');
+
+            // Initialize Progress
+            updateStepperUI();
+        };
+
+        // DYNAMIC QUESTION CARDS RENDERER
+        function renderQuestions(containerId, questionList, prefix) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+
+            questionList.forEach((qText, index) => {
+                const qNum = index + 1;
+                const cardHtml = `
+                    <div class="bg-slate-50/70 border border-slate-200 rounded-2xl p-4 md:p-5 shadow-sm space-y-3">
+                        <div class="flex items-start space-x-3">
+                            <span class="flex-shrink-0 w-7 h-7 bg-kemenag-800 text-white text-xs font-bold rounded-lg flex items-center justify-center mt-0.5">
+                                U${qNum}
+                            </span>
+                            <p class="text-xs md:text-sm font-semibold text-slate-800 leading-relaxed">
+                                ${qText} <span class="text-red-500">*</span>
+                            </p>
+                        </div>
+
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 md:gap-3 pt-2">
+                            ${ratingOptions.map(opt => `
+                                <div class="option-card relative">
+                                    <input type="radio" id="${prefix}_u${qNum}_opt${opt.value}" name="${prefix}_u${qNum}" value="${opt.value}" required class="peer hidden">
+                                    <label for="${prefix}_u${qNum}_opt${opt.value}" class="block p-3 bg-white border border-slate-200 rounded-xl cursor-pointer hover:border-slate-300 text-center select-none h-full flex flex-col justify-between">
+                                        <div class="text-2xl mb-1">${opt.emoji}</div>
+                                        <div>
+                                            <div class="text-xs font-bold text-slate-800">${opt.label}</div>
+                                            <div class="text-[10px] text-slate-400 mt-0.5">${opt.desc}</div>
+                                        </div>
+                                    </label>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += cardHtml;
+            });
+        }
+
+        // STEP NAVIGATION LOGIC & VALIDATION
+        function changeStep(direction) {
+            if (direction === 1 && !validateCurrentStep()) {
+                return;
+            }
+
+            // Hide Current Step
+            document.getElementById(`step-${currentStep}`).classList.add('hidden');
+
+            // Calculate Target Step
+            currentStep += direction;
+            if (currentStep < 1) currentStep = 1;
+            if (currentStep > totalSteps) currentStep = totalSteps;
+
+            // Show Target Step
+            document.getElementById(`step-${currentStep}`).classList.remove('hidden');
+
+            // Update Summary Info on Step 4
+            if (currentStep === 4) {
+                document.getElementById('summary-nama').innerText = document.getElementById('namaResponden').value || '-';
+                document.getElementById('summary-layanan').innerText = document.getElementById('jenisLayanan').value || '-';
+            }
+
+            updateStepperUI();
+            window.scrollTo({ top: 150, behavior: 'smooth' });
+        }
+
+        // VALIDATION BEFORE STEPPING NEXT
+        function validateCurrentStep() {
+            const currentFormStep = document.getElementById(`step-${currentStep}`);
+            const inputs = currentFormStep.querySelectorAll('input[required], select[required]');
+
+            for (let input of inputs) {
+                if (input.type === 'radio') {
+                    const name = input.name;
+                    const checked = currentFormStep.querySelector(`input[name="${name}"]:checked`);
+                    if (!checked) {
+                        alert('Mohon lengkapi semua pilihan evaluasi sebelum melanjutkan.');
+                        return false;
+                    }
+                } else if (!input.value.trim()) {
+                    input.focus();
+                    alert('Mohon isi bidang formulir yang masih kosong.');
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        // UPDATE STEPPER PROGRESS BAR & BUTTON VISIBILITY
+        function updateStepperUI() {
+            // Update Stepper Line Fill
+            const percentage = ((currentStep - 1) / (totalSteps - 1)) * 100;
+            document.getElementById('progress-bar-fill').style.width = `${percentage}%`;
+
+            // Update Nodes
+            const nodes = document.querySelectorAll('.step-node');
+            nodes.forEach((node, idx) => {
+                const stepNum = idx + 1;
+                const circle = node.querySelector('.step-circle');
+                const label = node.querySelector('.step-label');
+
+                if (stepNum < currentStep) {
+                    circle.className = 'step-circle w-9 h-9 md:w-11 md:h-11 rounded-full bg-emerald-600 text-white font-bold flex items-center justify-center text-sm shadow-md';
+                    circle.innerHTML = '<i class="fa-solid fa-check"></i>';
+                    label.className = 'step-label text-[11px] md:text-xs font-semibold text-emerald-700 mt-2 text-center';
+                } else if (stepNum === currentStep) {
+                    circle.className = 'step-circle w-9 h-9 md:w-11 md:h-11 rounded-full bg-kemenag-800 text-white font-bold flex items-center justify-center text-sm shadow-md ring-4 ring-emerald-100';
+                    circle.innerText = stepNum;
+                    label.className = 'step-label text-[11px] md:text-xs font-bold text-kemenag-800 mt-2 text-center';
+                } else {
+                    circle.className = 'step-circle w-9 h-9 md:w-11 md:h-11 rounded-full bg-slate-200 text-slate-500 font-bold flex items-center justify-center text-sm';
+                    circle.innerText = stepNum;
+                    label.className = 'step-label text-[11px] md:text-xs font-medium text-slate-400 mt-2 text-center';
+                }
+            });
+
+            // Button Visibilities
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const submitBtn = document.getElementById('submitBtn');
+
+            if (currentStep === 1) {
+                prevBtn.classList.add('hidden');
+                prevBtn.classList.remove('flex');
+            } else {
+                prevBtn.classList.remove('hidden');
+                prevBtn.classList.add('flex');
+            }
+
+            if (currentStep === totalSteps) {
+                nextBtn.classList.add('hidden');
+                submitBtn.classList.remove('hidden');
+                submitBtn.classList.add('flex');
+            } else {
+                nextBtn.classList.remove('hidden');
+                submitBtn.classList.add('hidden');
+                submitBtn.classList.remove('flex');
+            }
+        }
+
+        // CALCULATE INDEX (PERMENPAN-RB FORMULAS) & SUBMIT
+        function submitSurvey() {
+            // Collect SPKP Scores
+            let spkpSum = 0;
+            for (let i = 1; i <= 8; i++) {
+                const val = parseInt(document.querySelector(`input[name="spkp_u${i}"]:checked`).value);
+                spkpSum += val;
+            }
+
+            // Collect SPAK Scores
+            let spakSum = 0;
+            for (let i = 1; i <= 5; i++) {
+                const val = parseInt(document.querySelector(`input[name="spak_u${i}"]:checked`).value);
+                spakSum += val;
+            }
+
+            /* 
+               PERMENPAN-RB FORMULA CALCULATIONS:
+               - NRR (Nilai Rata-Rata) Unsur = Sum / Total Unsur
+               - Conversion to 100-scale Index = (NRR / 4) * 100 OR NRR_terbobot * 25
+            */
+            const avgSpkp = spkpSum / 8; // Scale 1 - 4
+            const scoreIPKP = (avgSpkp * 25).toFixed(2); // Scale 25 - 100
+
+            const avgSpak = spakSum / 5; // Scale 1 - 4
+            const scoreIPAK = (avgSpak * 25).toFixed(2); // Scale 25 - 100
+
+            // Determine Kategori Mutu
+            const getKategori = (score) => {
+                if (score >= 88.32) return { text: "Sangat Baik (A)", color: "bg-emerald-200 text-emerald-800" };
+                if (score >= 76.61) return { text: "Baik (B)", color: "bg-blue-200 text-blue-800" };
+                if (score >= 65.00) return { text: "Kurang Baik (C)", color: "bg-orange-200 text-orange-800" };
+                return { text: "Tidak Baik (D)", color: "bg-red-200 text-red-800" };
+            };
+
+            const katIPKP = getKategori(scoreIPKP);
+            const katIPAK = getKategori(scoreIPAK);
+
+            // Populate Modal
+            document.getElementById('modal-ipkp-score').innerText = scoreIPKP;
+            document.getElementById('modal-ipkp-badge').innerText = katIPKP.text;
+            document.getElementById('modal-ipkp-badge').className = `inline-block text-[10px] font-bold px-2 py-0.5 rounded-full ${katIPKP.color} mt-1`;
+
+            document.getElementById('modal-ipak-score').innerText = scoreIPAK;
+            document.getElementById('modal-ipak-badge').innerText = katIPAK.text;
+            document.getElementById('modal-ipak-badge').className = `inline-block text-[10px] font-bold px-2 py-0.5 rounded-full ${katIPAK.color} mt-1`;
+
+            // Open Thank You Modal
+            document.getElementById('resultModal').classList.remove('hidden');
+        }
+
+        // CLOSE MODAL & RESET FORM
+        function closeModalAndReset() {
+            document.getElementById('resultModal').classList.add('hidden');
+            document.getElementById('surveyForm').reset();
+            
+            // Reset Date to Today
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('tglSurvei').value = today;
+
+            // Reset back to Step 1
+            document.getElementById(`step-${currentStep}`).classList.add('hidden');
+            currentStep = 1;
+            document.getElementById(`step-1`).classList.remove('hidden');
+            updateStepperUI();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // TOGGLE DASHBOARD MODAL
+        function toggleDashboardModal() {
+            const modal = document.getElementById('dashboardModal');
+            modal.classList.toggle('hidden');
+        }
+    </script>
+</body>
+</html>
