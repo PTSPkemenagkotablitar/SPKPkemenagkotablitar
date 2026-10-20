@@ -499,7 +499,7 @@
     <!-- JAVASCRIPT LOGIC -->
     <script>
     // Masukkan URL Web App Google Apps Script Anda di sini
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw9uW7OgVVGtdnLZZjYaTFYm52n8OCr8e2FDqtJgThtPODnlJ2HHNxoqrA2WBV4MPWX/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxNqbr8n6jLd0yqGwEKQPtf84B29bRi3rU89XoYiExm9JoPrDglmWMous2wt8TlePdP/exec";
 
     // DATA PERMENPAN-RB NO. 90 TAHUN 2021
     const spkpQuestions = [
@@ -722,35 +722,34 @@
     const katIPKP = getKategori(scoreIPKP);
     const katIPAK = getKategori(scoreIPAK);
 
-    // Kirim data menggunakan format Form URL Encoded
-    const formData = new URLSearchParams();
-    formData.append('tglSurvei', document.getElementById('tglSurvei').value);
-    formData.append('namaResponden', document.getElementById('namaResponden').value);
-    formData.append('nomorHp', document.getElementById('nomorHp').value);
-    formData.append('jenisKelamin', document.querySelector('input[name="jenisKelamin"]:checked')?.value || "");
-    formData.append('usia', document.getElementById('usia').value);
-    formData.append('pendidikan', document.getElementById('pendidikan').value);
-    formData.append('pekerjaan', document.getElementById('pekerjaan').value);
-    formData.append('jenisLayanan', document.getElementById('jenisLayanan').value);
-    formData.append('saranMasukan', document.getElementById('saranMasukan').value);
-    formData.append('scoreIPKP', scoreIPKP);
-    formData.append('katIPKP', katIPKP.text);
-    formData.append('scoreIPAK', scoreIPAK);
-    formData.append('katIPAK', katIPAK.text);
-
-    // Masukkan data SPKP & SPAK ke form
-    for (let key in spkpData) { formData.append(key, spkpData[key]); }
-    for (let key in spakData) { formData.append(key, spakData[key]); }
+    // Membangun URL Parameter Query String agar lolos CORS browser secara sempurna
+    const params = new URLSearchParams({
+        tglSurvei: document.getElementById('tglSurvei').value,
+        namaResponden: document.getElementById('namaResponden').value,
+        nomorHp: document.getElementById('nomorHp').value,
+        jenisKelamin: document.querySelector('input[name="jenisKelamin"]:checked')?.value || "",
+        usia: document.getElementById('usia').value,
+        pendidikan: document.getElementById('pendidikan').value,
+        pekerjaan: document.getElementById('pekerjaan').value,
+        jenisLayanan: document.getElementById('jenisLayanan').value,
+        saranMasukan: document.getElementById('saranMasukan').value,
+        scoreIPKP: scoreIPKP,
+        katIPKP: katIPKP.text,
+        scoreIPAK: scoreIPAK,
+        katIPAK: katIPAK.text,
+        ...spkpData,
+        ...spakData
+    });
 
     try {
-        await fetch(SCRIPT_URL, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: formData.toString()
+        // Mengirim data menggunakan metode GET melalui fetch agar backend Google Apps Script langsung memproses
+        await fetch(`${SCRIPT_URL}?${params.toString()}`, {
+            method: 'GET',
+            mode: 'cors',
+            cache: 'no-cache'
         });
 
-        // Update Tampilan Modal Hasil
+        // Tampilkan Modal Sukses
         document.getElementById('modal-ipkp-score').innerText = scoreIPKP;
         document.getElementById('modal-ipkp-badge').innerText = katIPKP.text;
         document.getElementById('modal-ipkp-badge').className = `inline-block text-[10px] font-bold px-2 py-0.5 rounded-full ${katIPKP.color} mt-1`;
