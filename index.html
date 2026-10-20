@@ -494,10 +494,10 @@
 
     <!-- JAVASCRIPT LOGIC -->
     <script>
-    // URL Web App Google Apps Script Anda
-    const SCRIPT_URL = "https://script.google.com/macros/library/d/1NnUVXYUrxyp_20KqLKxyMYpaWSbQclcMABQHfm_3PofrjA2p6uAjoNsV/3";
+    // Masukkan URL Web App Google Apps Script Anda di sini
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyozMBACoX5wC368JrmQIkcDRy16vgcD6Zs1bkkyic54bId1AJjnfP84WRF9CMkb6tqYg/exec";
 
-    // DATA QUESTIONS DEFINITION (PERMENPAN-RB NO. 90 TAHUN 2021)
+    // DATA PERMENPAN-RB NO. 90 TAHUN 2021
     const spkpQuestions = [
         "Informasi pelayanan pada unit ini tersedia melalui media elektronik maupun non elektronik:",
         "Persyaratan pelayanan yang diinformasikan sesuai dengan persyaratan yang ditetapkan unit layanan ini:",
@@ -527,28 +527,45 @@
     let currentStep = 1;
     const totalSteps = 4;
 
-    // INITIALIZE APPLICATION ON LOAD
-    window.onload = function() {
-        // Set default date to today
+    // MENJALANKAN RENDER SAAT HALAMAN DIMUAT
+    window.addEventListener('DOMContentLoaded', () => {
         const today = new Date().toISOString().split('T')[0];
-        document.getElementById('tglSurvei').value = today;
+        const tglInput = document.getElementById('tglSurvei');
+        if (tglInput) tglInput.value = today;
 
-        // Render Questions
         renderQuestions('spkp-questions-container', spkpQuestions, 'spkp');
         renderQuestions('spak-questions-container', spakQuestions, 'spak');
-
-        // Initialize Progress
         updateStepperUI();
-    };
+    });
 
-    // DYNAMIC QUESTION CARDS RENDERER (PERBAIKAN STRUKTUR INPUT RADIO & LABEL)
+    // FUNGSI RENDER KARTU PERTANYAAN (DENGAN TEMPLATE LITERAL AMAN)
     function renderQuestions(containerId, questionList, prefix) {
         const container = document.getElementById(containerId);
-        container.innerHTML = '';
+        if (!container) return;
+        
+        let htmlContent = '';
 
         questionList.forEach((qText, index) => {
             const qNum = index + 1;
-            const cardHtml = `
+            
+            let optionsHtml = '';
+            ratingOptions.forEach(opt => {
+                const inputId = `${prefix}_u${qNum}_opt${opt.value}`;
+                optionsHtml += `
+                    <div class="option-card relative">
+                        <input type="radio" id="${inputId}" name="${prefix}_u${qNum}" value="${opt.value}" required class="sr-only peer">
+                        <label for="${inputId}" class="flex flex-col justify-between items-center text-center p-3 bg-white border border-slate-300 rounded-xl cursor-pointer hover:bg-slate-50 hover:border-slate-400 peer-checked:border-emerald-600 peer-checked:bg-emerald-50 peer-checked:ring-2 peer-checked:ring-emerald-500/40 transition-all duration-200 select-none h-full w-full">
+                            <span class="text-2xl md:text-3xl mb-1 block">${opt.emoji}</span>
+                            <div class="w-full">
+                                <div class="text-xs font-bold text-slate-800">${opt.label}</div>
+                                <div class="text-[9px] md:text-[10px] text-slate-500 mt-0.5 leading-tight">${opt.desc}</div>
+                            </div>
+                        </label>
+                    </div>
+                `;
+            });
+
+            htmlContent += `
                 <div class="bg-slate-50/80 border border-slate-200 rounded-2xl p-4 md:p-5 shadow-sm space-y-3">
                     <div class="flex items-start space-x-3 mb-2">
                         <span class="flex-shrink-0 w-7 h-7 bg-kemenag-800 text-white text-xs font-bold rounded-lg flex items-center justify-center mt-0.5">
@@ -558,48 +575,29 @@
                             ${qText} <span class="text-red-500">*</span>
                         </p>
                     </div>
-
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 md:gap-3 pt-2">
-                        ${ratingOptions.map(opt => {
-                            const inputId = `\${prefix}_u${qNum}_opt${opt.value}`;
-                            return `
-                                <div class="option-card relative">
-                                    <input type="radio" id="${inputId}" name="${prefix}_u${qNum}" value="${opt.value}" required class="sr-only peer">
-                                    <label for="\${inputId}" class="flex flex-col justify-between items-center text-center p-3 bg-white border border-slate-300 rounded-xl cursor-pointer hover:bg-slate-100 hover:border-slate-400 peer-checked:border-emerald-500 peer-checked:bg-emerald-50 peer-checked:ring-2 peer-checked:ring-emerald-500/50 transition-all duration-200 select-none h-full w-full">
-                                        <span class="text-3xl mb-1.5 leading-none block">\${opt.emoji}</span>
-                                        <div>
-                                            <div class="text-xs font-bold text-slate-800">\${opt.label}</div>
-                                            <div class="text-[10px] text-slate-500 mt-0.5">\${opt.desc}</div>
-                                        </div>
-                                    </label>
-                                </div>
-                            `;
-                        }).join('')}
+                        ${optionsHtml}
                     </div>
                 </div>
             `;
-            container.innerHTML += cardHtml;
         });
+
+        container.innerHTML = htmlContent;
     }
 
-    // STEP NAVIGATION LOGIC & VALIDATION
+    // NAVIGASI STEP FORMULIR
     function changeStep(direction) {
         if (direction === 1 && !validateCurrentStep()) {
             return;
         }
 
-        // Hide Current Step
         document.getElementById(`step-${currentStep}`).classList.add('hidden');
-
-        // Calculate Target Step
         currentStep += direction;
         if (currentStep < 1) currentStep = 1;
         if (currentStep > totalSteps) currentStep = totalSteps;
 
-        // Show Target Step
         document.getElementById(`step-${currentStep}`).classList.remove('hidden');
 
-        // Update Summary Info on Step 4
         if (currentStep === 4) {
             document.getElementById('summary-nama').innerText = document.getElementById('namaResponden').value || '-';
             document.getElementById('summary-layanan').innerText = document.getElementById('jenisLayanan').value || '-';
@@ -609,7 +607,7 @@
         window.scrollTo({ top: 150, behavior: 'smooth' });
     }
 
-    // VALIDATION BEFORE STEPPING NEXT
+    // VALIDASI INPUT FORM
     function validateCurrentStep() {
         const currentFormStep = document.getElementById(`step-${currentStep}`);
         const inputs = currentFormStep.querySelectorAll('input[required], select[required]');
@@ -619,7 +617,7 @@
                 const name = input.name;
                 const checked = currentFormStep.querySelector(`input[name="${name}"]:checked`);
                 if (!checked) {
-                    alert('Mohon lengkapi semua pilihan evaluasi sebelum melanjutkan.');
+                    alert('Mohon lengkapi semua pilihan evaluasi pada halaman ini sebelum melanjutkan.');
                     return false;
                 }
             } else if (!input.value.trim()) {
@@ -631,10 +629,11 @@
         return true;
     }
 
-    // UPDATE STEPPER PROGRESS BAR & BUTTON VISIBILITY
+    // UPDATE UI STEPPER
     function updateStepperUI() {
         const percentage = ((currentStep - 1) / (totalSteps - 1)) * 100;
-        document.getElementById('progress-bar-fill').style.width = `${percentage}%`;
+        const progressBar = document.getElementById('progress-bar-fill');
+        if (progressBar) progressBar.style.width = `${percentage}%`;
 
         const nodes = document.querySelectorAll('.step-node');
         nodes.forEach((node, idx) => {
@@ -680,7 +679,7 @@
         }
     }
 
-    // CALCULATE INDEX & SUBMIT TO GOOGLE APPS SCRIPT
+    // SUBMIT DATA KE GOOGLE SHEETS
     async function submitSurvey() {
         const submitBtn = document.getElementById('submitBtn');
         submitBtn.disabled = true;
@@ -704,11 +703,8 @@
             spakValues[`u${i}`] = val;
         }
 
-        const avgSpkp = spkpSum / 8;
-        const scoreIPKP = (avgSpkp * 25).toFixed(2);
-
-        const avgSpak = spakSum / 5;
-        const scoreIPAK = (avgSpak * 25).toFixed(2);
+        const scoreIPKP = ((spkpSum / 8) * 25).toFixed(2);
+        const scoreIPAK = ((spakSum / 5) * 25).toFixed(2);
 
         const getKategori = (score) => {
             if (score >= 88.32) return { text: "Sangat Baik (A)", color: "bg-emerald-200 text-emerald-800" };
@@ -739,7 +735,7 @@
         };
 
         try {
-            if (SCRIPT_URL && SCRIPT_URL !== "https://script.google.com/macros/library/d/1NnUVXYUrxyp_20KqLKxyMYpaWSbQclcMABQHfm_3PofrjA2p6uAjoNsV/3") {
+            if (SCRIPT_URL && SCRIPT_URL !== "https://script.google.com/macros/s/AKfycbyozMBACoX5wC368JrmQIkcDRy16vgcD6Zs1bkkyic54bId1AJjnfP84WRF9CMkb6tqYg/exec") {
                 await fetch(SCRIPT_URL, {
                     method: 'POST',
                     mode: 'no-cors',
@@ -767,7 +763,7 @@
         }
     }
 
-    // CLOSE MODAL & RESET FORM
+    // RESET & TUTUP MODAL
     function closeModalAndReset() {
         document.getElementById('resultModal').classList.add('hidden');
         document.getElementById('surveyForm').reset();
@@ -782,7 +778,7 @@
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // TOGGLE DASHBOARD MODAL
+    // TOGGLE STATISTIK MODAL
     function toggleDashboardModal() {
         const modal = document.getElementById('dashboardModal');
         modal.classList.toggle('hidden');
