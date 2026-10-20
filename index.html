@@ -500,7 +500,7 @@
     <!-- JAVASCRIPT LOGIC -->
     <script>
     // Masukkan URL Web App Google Apps Script Anda di sini
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxqRALSl4YSUlZ4ovkfZCZRqsN9OXioY6JwKtURq5cQQnMDnp6GIvR4A8brwVrvZt2lrw/exec";
+    const SCRIPT_URL = "GANTI_DENGAN_URL_WEB_APP_GOOGLE_APPS_SCRIPT_ANDA";
 
     // DATA PERMENPAN-RB NO. 90 TAHUN 2021
     const spkpQuestions = [
@@ -685,18 +685,27 @@
     }
 
     // SUBMIT DATA KE GOOGLE SHEETS
-    function submitSurvey() {
-        // Hitung skor IPKP & IPAK
+    async function submitSurvey() {
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> Mengirim Data...`;
+
         let spkpSum = 0;
+        let spkpValues = {};
         for (let i = 1; i <= 8; i++) {
             const radio = document.querySelector(`input[name="spkp_u${i}"]:checked`);
-            spkpSum += radio ? parseInt(radio.value) : 0;
+            const val = radio ? parseInt(radio.value) : 0;
+            spkpSum += val;
+            spkpValues[`u${i}`] = val;
         }
 
         let spakSum = 0;
+        let spakValues = {};
         for (let i = 1; i <= 5; i++) {
             const radio = document.querySelector(`input[name="spak_u${i}"]:checked`);
-            spakSum += radio ? parseInt(radio.value) : 0;
+            const val = radio ? parseInt(radio.value) : 0;
+            spakSum += val;
+            spakValues[`u${i}`] = val;
         }
 
         const scoreIPKP = ((spkpSum / 8) * 25).toFixed(2);
@@ -712,42 +721,73 @@
         const katIPKP = getKategori(scoreIPKP);
         const katIPAK = getKategori(scoreIPAK);
 
-        // Buat input hidden secara dinamis untuk menampung skor kalkulasi agar terkirim ke Apps Script
-        const form = document.getElementById('surveyForm');
-        
-        // Hapus input hidden sebelumnya jika ada
-        document.querySelectorAll('.dynamic-hidden').forEach(el => el.remove());
-
-        const scores = {
+        const payload = {
+            tglSurvei: document.getElementById('tglSurvei').value,
+            namaResponden: document.getElementById('namaResponden').value,
+            nomorHp: document.getElementById('nomorHp').value,
+            jenisKelamin: document.querySelector('input[name="jenisKelamin"]:checked')?.value || "",
+            usia: document.getElementById('usia').value,
+            pendidikan: document.getElementById('pendidikan').value,
+            pekerjaan: document.getElementById('pekerjaan').value,
+            jenisLayanan: document.getElementById('jenisLayanan').value,
+            spkp: spkpValues,
+            spak: spakValues,
+            saranMasukan: document.getElementById('saranMasukan').value,
             scoreIPKP: scoreIPKP,
             katIPKP: katIPKP.text,
             scoreIPAK: scoreIPAK,
             katIPAK: katIPAK.text
         };
 
-        for (const key in scores) {
-            const input = document.createElement('input');
-            input.type = 'hidden';
-            input.name = key;
-            input.value = scores[key];
-            input.className = 'dynamic-hidden';
-            form.appendChild(input);
+        try {
+            if (SCRIPT_URL && SCRIPT_URL !== "GANTI_DENGAN_URL_WEB_APP_GOOGLE_APPS_SCRIPT_ANDA") {
+                await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    cache: 'no-cache',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(payload)
+                });
+            }
+
+            document.getElementById('modal-ipkp-score').innerText = scoreIPKP;
+            document.getElementById('modal-ipkp-badge').innerText = katIPKP.text;
+            document.getElementById('modal-ipkp-badge').className = `inline-block text-[10px] font-bold px-2 py-0.5 rounded-full ${katIPKP.color} mt-1`;
+
+            document.getElementById('modal-ipak-score').innerText = scoreIPAK;
+            document.getElementById('modal-ipak-badge').innerText = katIPAK.text;
+            document.getElementById('modal-ipak-badge').className = `inline-block text-[10px] font-bold px-2 py-0.5 rounded-full ${katIPAK.color} mt-1`;
+
+            document.getElementById('resultModal').classList.remove('hidden');
+
+        } catch (err) {
+            alert("Terjadi kesalahan saat mengirim survei: " + err.message);
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = `<i class="fa-solid fa-paper-plane mr-2"></i> Kirim Survei`;
         }
-
-        // Tampilkan hasil di modal
-        document.getElementById('modal-ipkp-score').innerText = scoreIPKP;
-        document.getElementById('modal-ipkp-badge').innerText = katIPKP.text;
-        document.getElementById('modal-ipkp-badge').className = `inline-block text-[10px] font-bold px-2 py-0.5 rounded-full ${katIPKP.color} mt-1`;
-
-        document.getElementById('modal-ipak-score').innerText = scoreIPAK;
-        document.getElementById('modal-ipak-badge').innerText = katIPAK.text;
-        document.getElementById('modal-ipak-badge').className = `inline-block text-[10px] font-bold px-2 py-0.5 rounded-full ${katIPAK.color} mt-1`;
-
-        // Submit form secara native ke Google Apps Script via iframe
-        form.submit();
-
-        // Tampilkan modal sukses
-        document.getElementById('resultModal').classList.remove('hidden');
     }
+
+    // RESET & TUTUP MODAL
+    function closeModalAndReset() {
+        document.getElementById('resultModal').classList.add('hidden');
+        document.getElementById('surveyForm').reset();
+        
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('tglSurvei').value = today;
+
+        document.getElementById(`step-${currentStep}`).classList.add('hidden');
+        currentStep = 1;
+        document.getElementById(`step-1`).classList.remove('hidden');
+        updateStepperUI();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // TOGGLE STATISTIK MODAL
+    function toggleDashboardModal() {
+        const modal = document.getElementById('dashboardModal');
+        modal.classList.toggle('hidden');
+    }
+</script>
 </body>
 </html>
