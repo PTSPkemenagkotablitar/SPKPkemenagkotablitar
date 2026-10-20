@@ -499,228 +499,265 @@
 
     <!-- JAVASCRIPT LOGIC -->
     <script>
-        // DATA QUESTIONS DEFINITION (PERMENPAN-RB NO. 90 TAHUN 2021)
-        const spkpQuestions = [
-            "Informasi pelayanan pada unit ini tersedia melalui media elektronik maupun non elektronik:",
-            "Persyaratan pelayanan yang diinformasikan sesuai dengan persyaratan yang ditetapkan unit layanan ini:",
-            "Prosedur/Alur Pelayanan yang ditetapkan unit layanan ini mudah diikuti/dilakukan:",
-            "Jangka waktu penyelesaian pelayanan yang diterima Bapak/Ibu sesuai dengan yang ditetapkan unit layanan ini:",
-            "Tarif/Biaya pelayanan yang dibayarkan pada unit layanan ini sesuai dengan tarif/biaya yang ditetapkan:",
-            "Sarana dan Prasarana pendukung pelayanan/sistem pelayanan online yang disediakan unit layanan ini memberikan kenyamanan/mudah digunakan:",
-            "Petugas pelayanan/sistem pelayanan online pada unit layanan ini merespon keperluan Bapak/Ibu dengan cepat:",
-            "Layanan konsultasi dan pengaduan yang disediakan unit layanan ini mudah digunakan/diakses:"
-        ];
+    // masukkan URL Web App Google Apps Script Anda di sini
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw9ONhJyiHVWHnWakVDygpNXp8on8hG6Ifc7_YWZeKSCqHRLq_GBRwLIg5pDkCbzcuX/exec";
 
-        const spakQuestions = [
-            "Tidak ada diskriminasi pelayanan pada unit layanan ini:",
-            "Tidak ada Pelayanan diluar prosedur/kecurangan pelayanan pada unit layanan ini:",
-            "Tidak ada penerimaan imbalan/uang/barang/fasilitas diluar ketentuan yang berlaku pada unit layanan ini:",
-            "Tidak ada Pungutan Liar (Pungli) pada unit layanan ini:",
-            "Tidak ada percaloan/perantara tidak resmi pada unit layanan ini:"
-        ];
+    // DATA QUESTIONS DEFINITION (PERMENPAN-RB NO. 90 TAHUN 2021)
+    const spkpQuestions = [
+        "Informasi pelayanan pada unit ini tersedia melalui media elektronik maupun non elektronik:",
+        "Persyaratan pelayanan yang diinformasikan sesuai dengan persyaratan yang ditetapkan unit layanan ini:",
+        "Prosedur/Alur Pelayanan yang ditetapkan unit layanan ini mudah diikuti/dilakukan:",
+        "Jangka waktu penyelesaian pelayanan yang diterima Bapak/Ibu sesuai dengan yang ditetapkan unit layanan ini:",
+        "Tarif/Biaya pelayanan yang dibayarkan pada unit layanan ini sesuai dengan tarif/biaya yang ditetapkan:",
+        "Sarana dan Prasarana pendukung pelayanan/sistem pelayanan online yang disediakan unit layanan ini memberikan kenyamanan/mudah digunakan:",
+        "Petugas pelayanan/sistem pelayanan online pada unit layanan ini merespon keperluan Bapak/Ibu dengan cepat:",
+        "Layanan konsultasi dan pengaduan yang disediakan unit layanan ini mudah digunakan/diakses:"
+    ];
 
-        const ratingOptions = [
-            { value: 1, label: "Tidak Baik", icon: "🔴", emoji: "😖", desc: "Sangat Lambat / Tidak Sesuai" },
-            { value: 2, label: "Kurang Baik", icon: "🟠", emoji: "😕", desc: "Lambat / Kurang Sesuai" },
-            { value: 3, label: "Baik", icon: "🟢", emoji: "😊", desc: "Cepat / Sesuai" },
-            { value: 4, label: "Sangat Baik", icon: "🌟", emoji: "😍", desc: "Sangat Cepat / Sangat Sesuai" }
-        ];
+    const spakQuestions = [
+        "Tidak ada diskriminasi pelayanan pada unit layanan ini:",
+        "Tidak ada Pelayanan diluar prosedur/kecurangan pelayanan pada unit layanan ini:",
+        "Tidak ada penerimaan imbalan/uang/barang/fasilitas diluar ketentuan yang berlaku pada unit layanan ini:",
+        "Tidak ada Pungutan Liar (Pungli) pada unit layanan ini:",
+        "Tidak ada percaloan/perantara tidak resmi pada unit layanan ini:"
+    ];
 
-        let currentStep = 1;
-        const totalSteps = 4;
+    const ratingOptions = [
+        { value: 1, label: "Tidak Baik", icon: "🔴", emoji: "😖", desc: "Sangat Lambat / Tidak Sesuai" },
+        { value: 2, label: "Kurang Baik", icon: "🟠", emoji: "😕", desc: "Lambat / Kurang Sesuai" },
+        { value: 3, label: "Baik", icon: "🟢", emoji: "😊", desc: "Cepat / Sesuai" },
+        { value: 4, label: "Sangat Baik", icon: "🌟", emoji: "😍", desc: "Sangat Cepat / Sangat Sesuai" }
+    ];
 
-        // INITIALIZE APPLICATION ON LOAD
-        window.onload = function() {
-            // Set default date to today
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('tglSurvei').value = today;
+    let currentStep = 1;
+    const totalSteps = 4;
 
-            // Render Questions
-            renderQuestions('spkp-questions-container', spkpQuestions, 'spkp');
-            renderQuestions('spak-questions-container', spakQuestions, 'spak');
+    // INITIALIZE APPLICATION ON LOAD
+    window.onload = function() {
+        // Set default date to today
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('tglSurvei').value = today;
 
-            // Initialize Progress
-            updateStepperUI();
-        };
+        // Render Questions
+        renderQuestions('spkp-questions-container', spkpQuestions, 'spkp');
+        renderQuestions('spak-questions-container', spakQuestions, 'spak');
 
-        // DYNAMIC QUESTION CARDS RENDERER
-        function renderQuestions(containerId, questionList, prefix) {
-            const container = document.getElementById(containerId);
-            container.innerHTML = '';
+        // Initialize Progress
+        updateStepperUI();
+    };
 
-            questionList.forEach((qText, index) => {
-                const qNum = index + 1;
-                const cardHtml = `
-                    <div class="bg-slate-50/70 border border-slate-200 rounded-2xl p-4 md:p-5 shadow-sm space-y-3">
-                        <div class="flex items-start space-x-3">
-                            <span class="flex-shrink-0 w-7 h-7 bg-kemenag-800 text-white text-xs font-bold rounded-lg flex items-center justify-center mt-0.5">
-                                U${qNum}
-                            </span>
-                            <p class="text-xs md:text-sm font-semibold text-slate-800 leading-relaxed">
-                                ${qText} <span class="text-red-500">*</span>
-                            </p>
-                        </div>
+    // DYNAMIC QUESTION CARDS RENDERER
+    function renderQuestions(containerId, questionList, prefix) {
+        const container = document.getElementById(containerId);
+        container.innerHTML = '';
 
-                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 md:gap-3 pt-2">
-                            ${ratingOptions.map(opt => `
-                                <div class="option-card relative">
-                                    <input type="radio" id="${prefix}_u${qNum}_opt${opt.value}" name="${prefix}_u${qNum}" value="${opt.value}" required class="peer hidden">
-                                    <label for="${prefix}_u${qNum}_opt${opt.value}" class="block p-3 bg-white border border-slate-200 rounded-xl cursor-pointer hover:border-slate-300 text-center select-none h-full flex flex-col justify-between">
-                                        <div class="text-2xl mb-1">${opt.emoji}</div>
-                                        <div>
-                                            <div class="text-xs font-bold text-slate-800">${opt.label}</div>
-                                            <div class="text-[10px] text-slate-400 mt-0.5">${opt.desc}</div>
-                                        </div>
-                                    </label>
-                                </div>
-                            `).join('')}
-                        </div>
+        questionList.forEach((qText, index) => {
+            const qNum = index + 1;
+            const cardHtml = `
+                <div class="bg-slate-50/70 border border-slate-200 rounded-2xl p-4 md:p-5 shadow-sm space-y-3">
+                    <div class="flex items-start space-x-3">
+                        <span class="flex-shrink-0 w-7 h-7 bg-kemenag-800 text-white text-xs font-bold rounded-lg flex items-center justify-center mt-0.5">
+                            U${qNum}
+                        </span>
+                        <p class="text-xs md:text-sm font-semibold text-slate-800 leading-relaxed">
+                            ${qText} <span class="text-red-500">*</span>
+                        </p>
                     </div>
-                `;
-                container.innerHTML += cardHtml;
-            });
+
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 md:gap-3 pt-2">
+                        ${ratingOptions.map(opt => `
+                            <div class="option-card relative">
+                                <input type="radio" id="${prefix}_u${qNum}_opt${opt.value}" name="${prefix}_u${qNum}" value="${opt.value}" required class="peer hidden">
+                                <label for="\${prefix}_u${qNum}_opt${opt.value}" class="block p-3 bg-white border border-slate-200 rounded-xl cursor-pointer hover:border-slate-300 text-center select-none h-full flex flex-col justify-between">
+                                    <div class="text-2xl mb-1">\${opt.emoji}</div>
+                                    <div>
+                                        <div class="text-xs font-bold text-slate-800">\${opt.label}</div>
+                                        <div class="text-[10px] text-slate-400 mt-0.5">\${opt.desc}</div>
+                                    </div>
+                                </label>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            container.innerHTML += cardHtml;
+        });
+    }
+
+    // STEP NAVIGATION LOGIC & VALIDATION
+    function changeStep(direction) {
+        if (direction === 1 && !validateCurrentStep()) {
+            return;
         }
 
-        // STEP NAVIGATION LOGIC & VALIDATION
-        function changeStep(direction) {
-            if (direction === 1 && !validateCurrentStep()) {
-                return;
-            }
+        // Hide Current Step
+        document.getElementById(`step-${currentStep}`).classList.add('hidden');
 
-            // Hide Current Step
-            document.getElementById(`step-${currentStep}`).classList.add('hidden');
+        // Calculate Target Step
+        currentStep += direction;
+        if (currentStep < 1) currentStep = 1;
+        if (currentStep > totalSteps) currentStep = totalSteps;
 
-            // Calculate Target Step
-            currentStep += direction;
-            if (currentStep < 1) currentStep = 1;
-            if (currentStep > totalSteps) currentStep = totalSteps;
+        // Show Target Step
+        document.getElementById(`step-${currentStep}`).classList.remove('hidden');
 
-            // Show Target Step
-            document.getElementById(`step-${currentStep}`).classList.remove('hidden');
-
-            // Update Summary Info on Step 4
-            if (currentStep === 4) {
-                document.getElementById('summary-nama').innerText = document.getElementById('namaResponden').value || '-';
-                document.getElementById('summary-layanan').innerText = document.getElementById('jenisLayanan').value || '-';
-            }
-
-            updateStepperUI();
-            window.scrollTo({ top: 150, behavior: 'smooth' });
+        // Update Summary Info on Step 4
+        if (currentStep === 4) {
+            document.getElementById('summary-nama').innerText = document.getElementById('namaResponden').value || '-';
+            document.getElementById('summary-layanan').innerText = document.getElementById('jenisLayanan').value || '-';
         }
 
-        // VALIDATION BEFORE STEPPING NEXT
-        function validateCurrentStep() {
-            const currentFormStep = document.getElementById(`step-${currentStep}`);
-            const inputs = currentFormStep.querySelectorAll('input[required], select[required]');
+        updateStepperUI();
+        window.scrollTo({ top: 150, behavior: 'smooth' });
+    }
 
-            for (let input of inputs) {
-                if (input.type === 'radio') {
-                    const name = input.name;
-                    const checked = currentFormStep.querySelector(`input[name="${name}"]:checked`);
-                    if (!checked) {
-                        alert('Mohon lengkapi semua pilihan evaluasi sebelum melanjutkan.');
-                        return false;
-                    }
-                } else if (!input.value.trim()) {
-                    input.focus();
-                    alert('Mohon isi bidang formulir yang masih kosong.');
+    // VALIDATION BEFORE STEPPING NEXT
+    function validateCurrentStep() {
+        const currentFormStep = document.getElementById(`step-${currentStep}`);
+        const inputs = currentFormStep.querySelectorAll('input[required], select[required]');
+
+        for (let input of inputs) {
+            if (input.type === 'radio') {
+                const name = input.name;
+                const checked = currentFormStep.querySelector(`input[name="${name}"]:checked`);
+                if (!checked) {
+                    alert('Mohon lengkapi semua pilihan evaluasi sebelum melanjutkan.');
                     return false;
                 }
-            }
-            return true;
-        }
-
-        // UPDATE STEPPER PROGRESS BAR & BUTTON VISIBILITY
-        function updateStepperUI() {
-            // Update Stepper Line Fill
-            const percentage = ((currentStep - 1) / (totalSteps - 1)) * 100;
-            document.getElementById('progress-bar-fill').style.width = `${percentage}%`;
-
-            // Update Nodes
-            const nodes = document.querySelectorAll('.step-node');
-            nodes.forEach((node, idx) => {
-                const stepNum = idx + 1;
-                const circle = node.querySelector('.step-circle');
-                const label = node.querySelector('.step-label');
-
-                if (stepNum < currentStep) {
-                    circle.className = 'step-circle w-9 h-9 md:w-11 md:h-11 rounded-full bg-emerald-600 text-white font-bold flex items-center justify-center text-sm shadow-md';
-                    circle.innerHTML = '<i class="fa-solid fa-check"></i>';
-                    label.className = 'step-label text-[11px] md:text-xs font-semibold text-emerald-700 mt-2 text-center';
-                } else if (stepNum === currentStep) {
-                    circle.className = 'step-circle w-9 h-9 md:w-11 md:h-11 rounded-full bg-kemenag-800 text-white font-bold flex items-center justify-center text-sm shadow-md ring-4 ring-emerald-100';
-                    circle.innerText = stepNum;
-                    label.className = 'step-label text-[11px] md:text-xs font-bold text-kemenag-800 mt-2 text-center';
-                } else {
-                    circle.className = 'step-circle w-9 h-9 md:w-11 md:h-11 rounded-full bg-slate-200 text-slate-500 font-bold flex items-center justify-center text-sm';
-                    circle.innerText = stepNum;
-                    label.className = 'step-label text-[11px] md:text-xs font-medium text-slate-400 mt-2 text-center';
-                }
-            });
-
-            // Button Visibilities
-            const prevBtn = document.getElementById('prevBtn');
-            const nextBtn = document.getElementById('nextBtn');
-            const submitBtn = document.getElementById('submitBtn');
-
-            if (currentStep === 1) {
-                prevBtn.classList.add('hidden');
-                prevBtn.classList.remove('flex');
-            } else {
-                prevBtn.classList.remove('hidden');
-                prevBtn.classList.add('flex');
-            }
-
-            if (currentStep === totalSteps) {
-                nextBtn.classList.add('hidden');
-                submitBtn.classList.remove('hidden');
-                submitBtn.classList.add('flex');
-            } else {
-                nextBtn.classList.remove('hidden');
-                submitBtn.classList.add('hidden');
-                submitBtn.classList.remove('flex');
+            } else if (!input.value.trim()) {
+                input.focus();
+                alert('Mohon isi bidang formulir yang masih kosong.');
+                return false;
             }
         }
+        return true;
+    }
 
-        // CALCULATE INDEX (PERMENPAN-RB FORMULAS) & SUBMIT
-        function submitSurvey() {
-            // Collect SPKP Scores
-            let spkpSum = 0;
-            for (let i = 1; i <= 8; i++) {
-                const val = parseInt(document.querySelector(`input[name="spkp_u${i}"]:checked`).value);
-                spkpSum += val;
+    // UPDATE STEPPER PROGRESS BAR & BUTTON VISIBILITY
+    function updateStepperUI() {
+        // Update Stepper Line Fill
+        const percentage = ((currentStep - 1) / (totalSteps - 1)) * 100;
+        document.getElementById('progress-bar-fill').style.width = `${percentage}%`;
+
+        // Update Nodes
+        const nodes = document.querySelectorAll('.step-node');
+        nodes.forEach((node, idx) => {
+            const stepNum = idx + 1;
+            const circle = node.querySelector('.step-circle');
+            const label = node.querySelector('.step-label');
+
+            if (stepNum < currentStep) {
+                circle.className = 'step-circle w-9 h-9 md:w-11 md:h-11 rounded-full bg-emerald-600 text-white font-bold flex items-center justify-center text-sm shadow-md';
+                circle.innerHTML = '<i class="fa-solid fa-check"></i>';
+                label.className = 'step-label text-[11px] md:text-xs font-semibold text-emerald-700 mt-2 text-center';
+            } else if (stepNum === currentStep) {
+                circle.className = 'step-circle w-9 h-9 md:w-11 md:h-11 rounded-full bg-kemenag-800 text-white font-bold flex items-center justify-center text-sm shadow-md ring-4 ring-emerald-100';
+                circle.innerText = stepNum;
+                label.className = 'step-label text-[11px] md:text-xs font-bold text-kemenag-800 mt-2 text-center';
+            } else {
+                circle.className = 'step-circle w-9 h-9 md:w-11 md:h-11 rounded-full bg-slate-200 text-slate-500 font-bold flex items-center justify-center text-sm';
+                circle.innerText = stepNum;
+                label.className = 'step-label text-[11px] md:text-xs font-medium text-slate-400 mt-2 text-center';
+            }
+        });
+
+        // Button Visibilities
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const submitBtn = document.getElementById('submitBtn');
+
+        if (currentStep === 1) {
+            prevBtn.classList.add('hidden');
+            prevBtn.classList.remove('flex');
+        } else {
+            prevBtn.classList.remove('hidden');
+            prevBtn.classList.add('flex');
+        }
+
+        if (currentStep === totalSteps) {
+            nextBtn.classList.add('hidden');
+            submitBtn.classList.remove('hidden');
+            submitBtn.classList.add('flex');
+        } else {
+            nextBtn.classList.remove('hidden');
+            submitBtn.classList.add('hidden');
+            submitBtn.classList.remove('flex');
+        }
+    }
+
+    // CALCULATE INDEX & SUBMIT TO GOOGLE APPS SCRIPT
+    async function submitSurvey() {
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> Mengirim Data...`;
+
+        // Collect SPKP Scores
+        let spkpSum = 0;
+        let spkpValues = {};
+        for (let i = 1; i <= 8; i++) {
+            const val = parseInt(document.querySelector(`input[name="spkp_u${i}"]:checked`).value);
+            spkpSum += val;
+            spkpValues[`u${i}`] = val;
+        }
+
+        // Collect SPAK Scores
+        let spakSum = 0;
+        let spakValues = {};
+        for (let i = 1; i <= 5; i++) {
+            const val = parseInt(document.querySelector(`input[name="spak_u${i}"]:checked`).value);
+            spakSum += val;
+            spakValues[`u${i}`] = val;
+        }
+
+        // PermenPAN-RB Calculations
+        const avgSpkp = spkpSum / 8;
+        const scoreIPKP = (avgSpkp * 25).toFixed(2);
+
+        const avgSpak = spakSum / 5;
+        const scoreIPAK = (avgSpak * 25).toFixed(2);
+
+        // Kategori Mutu
+        const getKategori = (score) => {
+            if (score >= 88.32) return { text: "Sangat Baik (A)", color: "bg-emerald-200 text-emerald-800" };
+            if (score >= 76.61) return { text: "Baik (B)", color: "bg-blue-200 text-blue-800" };
+            if (score >= 65.00) return { text: "Kurang Baik (C)", color: "bg-orange-200 text-orange-800" };
+            return { text: "Tidak Baik (D)", color: "bg-red-200 text-red-800" };
+        };
+
+        const katIPKP = getKategori(scoreIPKP);
+        const katIPAK = getKategori(scoreIPAK);
+
+        // Payload Object
+        const payload = {
+            tglSurvei: document.getElementById('tglSurvei').value,
+            namaResponden: document.getElementById('namaResponden').value,
+            nomorHp: document.getElementById('nomorHp').value,
+            jenisKelamin: document.querySelector('input[name="jenisKelamin"]:checked')?.value || "",
+            usia: document.getElementById('usia').value,
+            pendidikan: document.getElementById('pendidikan').value,
+            pekerjaan: document.getElementById('pekerjaan').value,
+            jenisLayanan: document.getElementById('jenisLayanan').value,
+            spkp: spkpValues,
+            spak: spakValues,
+            saranMasukan: document.getElementById('saranMasukan').value,
+            scoreIPKP: scoreIPKP,
+            katIPKP: katIPKP.text,
+            scoreIPAK: scoreIPAK,
+            katIPAK: katIPAK.text
+        };
+
+        try {
+            // Kirim data ke Google Sheets melalui Apps Script
+            if (SCRIPT_URL && SCRIPT_URL !== "GANTI_DENGAN_URL_WEB_APP_GOOGLE_APPS_SCRIPT_ANDA") {
+                await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors', // Mencegah pemblokiran CORS saat mengakses Apps Script
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
             }
 
-            // Collect SPAK Scores
-            let spakSum = 0;
-            for (let i = 1; i <= 5; i++) {
-                const val = parseInt(document.querySelector(`input[name="spak_u${i}"]:checked`).value);
-                spakSum += val;
-            }
-
-            /* 
-               PERMENPAN-RB FORMULA CALCULATIONS:
-               - NRR (Nilai Rata-Rata) Unsur = Sum / Total Unsur
-               - Conversion to 100-scale Index = (NRR / 4) * 100 OR NRR_terbobot * 25
-            */
-            const avgSpkp = spkpSum / 8; // Scale 1 - 4
-            const scoreIPKP = (avgSpkp * 25).toFixed(2); // Scale 25 - 100
-
-            const avgSpak = spakSum / 5; // Scale 1 - 4
-            const scoreIPAK = (avgSpak * 25).toFixed(2); // Scale 25 - 100
-
-            // Determine Kategori Mutu
-            const getKategori = (score) => {
-                if (score >= 88.32) return { text: "Sangat Baik (A)", color: "bg-emerald-200 text-emerald-800" };
-                if (score >= 76.61) return { text: "Baik (B)", color: "bg-blue-200 text-blue-800" };
-                if (score >= 65.00) return { text: "Kurang Baik (C)", color: "bg-orange-200 text-orange-800" };
-                return { text: "Tidak Baik (D)", color: "bg-red-200 text-red-800" };
-            };
-
-            const katIPKP = getKategori(scoreIPKP);
-            const katIPAK = getKategori(scoreIPAK);
-
-            // Populate Modal
+            // Tampilkan Skor pada Modal Result
             document.getElementById('modal-ipkp-score').innerText = scoreIPKP;
             document.getElementById('modal-ipkp-badge').innerText = katIPKP.text;
             document.getElementById('modal-ipkp-badge').className = `inline-block text-[10px] font-bold px-2 py-0.5 rounded-full ${katIPKP.color} mt-1`;
@@ -729,32 +766,39 @@
             document.getElementById('modal-ipak-badge').innerText = katIPAK.text;
             document.getElementById('modal-ipak-badge').className = `inline-block text-[10px] font-bold px-2 py-0.5 rounded-full ${katIPAK.color} mt-1`;
 
-            // Open Thank You Modal
+            // Buka Modal Hasil Sukses
             document.getElementById('resultModal').classList.remove('hidden');
-        }
 
-        // CLOSE MODAL & RESET FORM
-        function closeModalAndReset() {
-            document.getElementById('resultModal').classList.add('hidden');
-            document.getElementById('surveyForm').reset();
-            
-            // Reset Date to Today
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('tglSurvei').value = today;
-
-            // Reset back to Step 1
-            document.getElementById(`step-${currentStep}`).classList.add('hidden');
-            currentStep = 1;
-            document.getElementById(`step-1`).classList.remove('hidden');
-            updateStepperUI();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+        } catch (err) {
+            alert("Terjadi kesalahan saat mengirim survei: " + err.message);
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = `<i class="fa-solid fa-paper-plane mr-2"></i> Kirim Survei`;
         }
+    }
 
-        // TOGGLE DASHBOARD MODAL
-        function toggleDashboardModal() {
-            const modal = document.getElementById('dashboardModal');
-            modal.classList.toggle('hidden');
-        }
-    </script>
+    // CLOSE MODAL & RESET FORM
+    function closeModalAndReset() {
+        document.getElementById('resultModal').classList.add('hidden');
+        document.getElementById('surveyForm').reset();
+        
+        // Reset Date to Today
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('tglSurvei').value = today;
+
+        // Reset back to Step 1
+        document.getElementById(`step-${currentStep}`).classList.add('hidden');
+        currentStep = 1;
+        document.getElementById(`step-1`).classList.remove('hidden');
+        updateStepperUI();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // TOGGLE DASHBOARD MODAL
+    function toggleDashboardModal() {
+        const modal = document.getElementById('dashboardModal');
+        modal.classList.toggle('hidden');
+    }
+</script>
 </body>
 </html>
