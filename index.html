@@ -499,7 +499,7 @@
     <!-- JAVASCRIPT LOGIC -->
     <script>
     // Masukkan URL Web App Google Apps Script Anda di sini
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxNqbr8n6jLd0yqGwEKQPtf84B29bRi3rU89XoYiExm9JoPrDglmWMous2wt8TlePdP/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyU9zn81GqHcby08KCM0qxJgvk3YVNjfTA8tXhUj00c0YAtPPaj4T2oTXBqx5HZoZDi/exec";
 
     // DATA PERMENPAN-RB NO. 90 TAHUN 2021
     const spkpQuestions = [
@@ -689,7 +689,7 @@
     submitBtn.disabled = true;
     submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> Mengirim Data...`;
 
-    // Hitung Skor SPKP
+    // Ambil data SPKP
     let spkpSum = 0;
     let spkpData = {};
     for (let i = 1; i <= 8; i++) {
@@ -699,7 +699,7 @@
         spkpData[`spkp_u${i}`] = val;
     }
 
-    // Hitung Skor SPAK
+    // Ambil data SPAK
     let spakSum = 0;
     let spakData = {};
     for (let i = 1; i <= 5; i++) {
@@ -722,7 +722,7 @@
     const katIPKP = getKategori(scoreIPKP);
     const katIPAK = getKategori(scoreIPAK);
 
-    // Membangun URL Parameter Query String agar lolos CORS browser secara sempurna
+    // Susun parameter query URL
     const params = new URLSearchParams({
         tglSurvei: document.getElementById('tglSurvei').value,
         namaResponden: document.getElementById('namaResponden').value,
@@ -742,14 +742,13 @@
     });
 
     try {
-        // Mengirim data menggunakan metode GET melalui fetch agar backend Google Apps Script langsung memproses
+        // Kirim request GET langsung tanpa dipotong CORS
         await fetch(`${SCRIPT_URL}?${params.toString()}`, {
             method: 'GET',
-            mode: 'cors',
-            cache: 'no-cache'
+            mode: 'no-cors'
         });
 
-        // Tampilkan Modal Sukses
+        // Tampilkan Modal Hasil Survei
         document.getElementById('modal-ipkp-score').innerText = scoreIPKP;
         document.getElementById('modal-ipkp-badge').innerText = katIPKP.text;
         document.getElementById('modal-ipkp-badge').className = `inline-block text-[10px] font-bold px-2 py-0.5 rounded-full ${katIPKP.color} mt-1`;
@@ -767,6 +766,7 @@
         submitBtn.innerHTML = `<i class="fa-solid fa-paper-plane mr-2"></i> Kirim Survei`;
     }
 }
+
 
     // RESET & TUTUP MODAL
     function closeModalAndReset() {
