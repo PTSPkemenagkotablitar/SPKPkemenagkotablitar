@@ -39,17 +39,12 @@
         }
     </script>
     <style>
-        /* Custom styles for interactive card radio inputs */
-        .option-card input[type="radio"]:checked + label {
-            border-color: #06fc89;
-            background-color: #0bcaeb;
-            box-shadow: 0 4px 12px rgba(5, 212, 115, 0.15);
-            transform: translateY(-2px);
-        }
+        /* Stylings for interactive option cards */
         .option-card label {
-            transition: all 0.2s ease-in-out;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
-        /* Hide default scrollbar for smooth tab scrolling if needed */
+        /* Custom scrollbar utility */
         .no-scrollbar::-webkit-scrollbar {
             display: none;
         }
