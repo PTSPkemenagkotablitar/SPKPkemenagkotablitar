@@ -1185,7 +1185,7 @@
     <!-- JAVASCRIPT LOGIC -->
     <script>
     // URL Web App Google Apps Script Anda
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbywQ8Wod3FepU9vDpmBUCUv_PmK7WtcDxqXLgA1wnszycOMyGbz0ORnWXHSfUBx6-DC/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx3U_vHxvgIpwWgh2Are9usDwCA-5JSR8wPEa1wGK0JTybItllZd-xTQC0kV-muN4ig/exec";
 
     // DATA PERMENPAN-RB NO. 90 TAHUN 2021
     const spkpQuestions = [
@@ -1218,80 +1218,88 @@
     const totalSteps = 4;
 
     // AMBIL DATA STATISTIK REAL-TIME DARI APP SCRIPT
-    async function loadRealtimeStats() {
-        try {
-            const response = await fetch(SCRIPT_URL);
-            const data = await response.json();
-            
-            if (data.totalResponden !== undefined) {
-                document.getElementById('stat-total-responden').innerText = data.totalResponden;
-                document.getElementById('stat-avg-ipkp').innerText = data.avgIPKP;
-                document.getElementById('stat-avg-ipak').innerText = data.avgIPAK;
-            }
-        } catch (err) {
-            console.log("Gagal memuat statistik:", err);
-        }
+    async function submitSurvey() {
+    const submitBtn = document.getElementById('submitBtn');
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> Mengirim Data...`;
+
+    // Ambil data SPKP
+    let spkpSum = 0;
+    let spkpData = {};
+    for (let i = 1; i <= 8; i++) {
+        const radio = document.querySelector(`input[name="spkp_u${i}"]:checked`);
+        const val = radio ? parseInt(radio.value) : 0;
+        spkpSum += val;
+        spkpData[`spkp_u${i}`] = val;
     }
 
-    // MENJALANKAN RENDER SAAT HALAMAN DIMUAT
-    window.addEventListener('DOMContentLoaded', () => {
-        const today = new Date().toISOString().split('T')[0];
-        const tglInput = document.getElementById('tglSurvei');
-        if (tglInput) tglInput.value = today;
+    // Ambil data SPAK
+    let spakSum = 0;
+    let spakData = {};
+    for (let i = 1; i <= 5; i++) {
+        const radio = document.querySelector(`input[name="spak_u${i}"]:checked`);
+        const val = radio ? parseInt(radio.value) : 0;
+        spakSum += val;
+        spakData[`spak_u${i}`] = val;
+    }
 
-        renderQuestions('spkp-questions-container', spkpQuestions, 'spkp');
-        renderQuestions('spak-questions-container', spakQuestions, 'spak');
-        updateStepperUI();
-        loadRealtimeStats();
+    const scoreIPKP = ((spkpSum / 8) * 25).toFixed(2);
+    const scoreIPAK = ((spakSum / 5) * 25).toFixed(2);
+
+    const getKategori = (score) => {
+        if (score >= 88.32) return { text: "Sangat Baik (A)", color: "bg-emerald-200 text-emerald-800" };
+        if (score >= 76.61) return { text: "Baik (B)", color: "bg-blue-200 text-blue-800" };
+        if (score >= 65.00) return { text: "Kurang Baik (C)", color: "bg-orange-200 text-orange-800" };
+        return { text: "Tidak Baik (D)", color: "bg-red-200 text-red-800" };
+    };
+
+    const katIPKP = getKategori(scoreIPKP);
+    const katIPAK = getKategori(scoreIPAK);
+
+    // Susun parameter data
+    const params = new URLSearchParams({
+        tglSurvei: document.getElementById('tglSurvei').value,
+        namaResponden: document.getElementById('namaResponden').value,
+        nomorHp: document.getElementById('nomorHp').value,
+        jenisKelamin: document.querySelector('input[name="jenisKelamin"]:checked')?.value || "",
+        usia: document.getElementById('usia').value,
+        pendidikan: document.getElementById('pendidikan').value,
+        pekerjaan: document.getElementById('pekerjaan').value,
+        jenisLayanan: document.getElementById('jenisLayanan').value,
+        saranMasukan: document.getElementById('saranMasukan').value,
+        scoreIPKP: scoreIPKP,
+        katIPKP: katIPKP.text,
+        scoreIPAK: scoreIPAK,
+        katIPAK: katIPAK.text,
+        ...spkpData,
+        ...spakData
     });
 
-    // FUNGSI RENDER KARTU PERTANYAAN
-    function renderQuestions(containerId, questionList, prefix) {
-        const container = document.getElementById(containerId);
-        if (!container) return;
-        
-        let htmlContent = '';
-
-        questionList.forEach((qText, index) => {
-            const qNum = index + 1;
-            
-            let optionsHtml = '';
-            ratingOptions.forEach(opt => {
-                const inputId = `${prefix}_u${qNum}_opt${opt.value}`;
-                optionsHtml += `
-                    <div class="option-card relative">
-                        <input type="radio" id="${inputId}" name="${prefix}_u${qNum}" value="${opt.value}" required class="sr-only peer">
-                        <label for="${inputId}" class="flex flex-col justify-between items-center text-center p-3 bg-white border border-slate-300 rounded-xl cursor-pointer hover:bg-slate-50 hover:border-slate-400 peer-checked:border-emerald-600 peer-checked:bg-emerald-50 peer-checked:ring-2 peer-checked:ring-emerald-500/40 transition-all duration-200 select-none h-full w-full">
-                            <span class="text-2xl md:text-3xl mb-1 block">${opt.emoji}</span>
-                            <div class="w-full">
-                                <div class="text-xs font-bold text-slate-800">${opt.label}</div>
-                                <div class="text-[9px] md:text-[10px] text-slate-500 mt-0.5 leading-tight">${opt.desc}</div>
-                            </div>
-                        </label>
-                    </div>
-                `;
-            });
-
-            htmlContent += `
-                <div class="bg-slate-50/80 border border-slate-200 rounded-2xl p-4 md:p-5 shadow-sm space-y-3">
-                    <div class="flex items-start space-x-3 mb-2">
-                        <span class="flex-shrink-0 w-7 h-7 bg-kemenag-800 text-white text-xs font-bold rounded-lg flex items-center justify-center mt-0.5">
-                            U${qNum}
-                        </span>
-                        <p class="text-xs md:text-sm font-semibold text-slate-800 leading-relaxed">
-                            ${qText} <span class="text-red-500">*</span>
-                        </p>
-                    </div>
-                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 md:gap-3 pt-2">
-                        ${optionsHtml}
-                    </div>
-                </div>
-            `;
+    try {
+        // Menggunakan metode POST dengan mode no-cors agar lolos dari blokir browser
+        await fetch(`${SCRIPT_URL}?${params.toString()}`, {
+            method: 'POST',
+            mode: 'no-cors'
         });
 
-        container.innerHTML = htmlContent;
-    }
+        // Tampilkan Modal Hasil Survei
+        document.getElementById('modal-ipkp-score').innerText = scoreIPKP;
+        document.getElementById('modal-ipkp-badge').innerText = katIPKP.text;
+        document.getElementById('modal-ipkp-badge').className = `inline-block text-[10px] font-bold px-2 py-0.5 rounded-full ${katIPKP.color} mt-1`;
 
+        document.getElementById('modal-ipak-score').innerText = scoreIPAK;
+        document.getElementById('modal-ipak-badge').innerText = katIPAK.text;
+        document.getElementById('modal-ipak-badge').className = `inline-block text-[10px] font-bold px-2 py-0.5 rounded-full ${katIPAK.color} mt-1`;
+
+        document.getElementById('resultModal').classList.remove('hidden');
+
+    } catch (err) {
+        alert("Terjadi kesalahan saat mengirim survei: " + err.message);
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = `<i class="fa-solid fa-paper-plane mr-2"></i> Kirim Survei`;
+    }
+}
     // NAVIGASI STEP FORMULIR
     function changeStep(direction) {
         if (direction === 1 && !validateCurrentStep()) {
