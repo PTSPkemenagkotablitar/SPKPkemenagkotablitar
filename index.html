@@ -789,6 +789,51 @@ async function submitSurvey() {
     function toggleDashboardModal() {
         const modal = document.getElementById('dashboardModal');
         modal.classList.toggle('hidden');
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+    // Masukkan URL Web App Google Apps Script Anda di sini
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxUL-StfOu-uKSTdkLkZV3qiR09DFznU99LReVTJBVrEifrwcwzD-h_beGbmy_1SA4I/exec";
+
+    // ... (kode const spkpQuestions, spkpQuestions, ratingOptions, dll tetap ada di sini) ...
+
+    // Dapatkan data statistik real-time dari Google Sheets
+    async function loadRealtimeStats() {
+        try {
+            const response = await fetch(SCRIPT_URL);
+            const data = await response.json();
+            
+            if (data.totalResponden !== undefined) {
+                document.getElementById('stat-total-responden').innerText = data.totalResponden;
+                document.getElementById('stat-avg-ipkp').innerText = data.avgIPKP;
+                document.getElementById('stat-avg-ipak').innerText = data.avgIPAK;
+            }
+        } catch (err) {
+            console.log("Gagal memuat statistik:", err);
+        }
+    }
+
+    // MENJALANKAN RENDER SAAT HALAMAN DIMUAT
+    window.addEventListener('DOMContentLoaded', () => {
+        const today = new Date().toISOString().split('T')[0];
+        const tglInput = document.getElementById('tglSurvei');
+        if (tglInput) tglInput.value = today;
+
+        renderQuestions('spkp-questions-container', spkpQuestions, 'spkp');
+        renderQuestions('spak-questions-container', spakQuestions, 'spak');
+        updateStepperUI();
+        loadRealtimeStats(); // Memuat statistik saat halaman dibuka
+    });
+
+    // ... (fungsi-fungsi renderQuestions, changeStep, validateCurrentStep, updateStepperUI, dan submitSurvey tetap di bawah sini) ...
+
+    // TOGGLE STATISTIK MODAL
+    function toggleDashboardModal() {
+        const modal = document.getElementById('dashboardModal');
+        const isHidden = modal.classList.contains('hidden');
+        if (isHidden) {
+            loadRealtimeStats(); // Refresh statistik terbaru saat modal statistik dibuka
+        }
+        modal.classList.toggle('hidden');
     }
 </script>
 </body>
