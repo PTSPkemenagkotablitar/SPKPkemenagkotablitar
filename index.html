@@ -499,7 +499,7 @@
     <!-- JAVASCRIPT LOGIC -->
     <script>
     // Masukkan URL Web App Google Apps Script Anda di sini
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyU9zn81GqHcby08KCM0qxJgvk3YVNjfTA8tXhUj00c0YAtPPaj4T2oTXBqx5HZoZDi/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbywQ8Wod3FepU9vDpmBUCUv_PmK7WtcDxqXLgA1wnszycOMyGbz0ORnWXHSfUBx6-DC/exec";
 
     // DATA PERMENPAN-RB NO. 90 TAHUN 2021
     const spkpQuestions = [
@@ -684,7 +684,7 @@
     }
 
     // SUBMIT DATA KE GOOGLE SHEETS
-    async function submitSurvey() {
+async function submitSurvey() {
     const submitBtn = document.getElementById('submitBtn');
     submitBtn.disabled = true;
     submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> Mengirim Data...`;
@@ -722,8 +722,8 @@
     const katIPKP = getKategori(scoreIPKP);
     const katIPAK = getKategori(scoreIPAK);
 
-    // Susun parameter query URL
-    const params = new URLSearchParams({
+    // Kirim data menggunakan URLSearchParams
+    const formData = new URLSearchParams({
         tglSurvei: document.getElementById('tglSurvei').value,
         namaResponden: document.getElementById('namaResponden').value,
         nomorHp: document.getElementById('nomorHp').value,
@@ -742,10 +742,13 @@
     });
 
     try {
-        // Kirim request GET langsung tanpa dipotong CORS
-        await fetch(`${https://script.google.com/macros/s/AKfycbyU9zn81GqHcby08KCM0qxJgvk3YVNjfTA8tXhUj00c0YAtPPaj4T2oTXBqx5HZoZDi/exec}?${params.toString()}`, {
+        await fetch(SCRIPT_URL, {
             method: 'POST',
-            mode: 'no-cors'
+            mode: 'no-cors',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: formData.toString()
         });
 
         // Tampilkan Modal Hasil Survei
@@ -766,7 +769,6 @@
         submitBtn.innerHTML = `<i class="fa-solid fa-paper-plane mr-2"></i> Kirim Survei`;
     }
 }
-
 
     // RESET & TUTUP MODAL
     function closeModalAndReset() {
